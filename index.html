@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Red de transporte</title>
+    <link rel="stylesheet" href="style.css" >
+</head>
+<body>
+    <h1>Red de Transporte</h1>
+    <section class="container">
+        <div class="grafico" >
+            <canvas class="canvas" id="miCanvas" width="600" height="600"></canvas>
+        </div>
+        <div class="formulario"  id="formulario">
+            <input type="text" id="origen" placeholder="Ciudad de Origen" />
+            <input type="text" id="destino" placeholder="Ciudad de Destino" />
+            <button id="calcularRuta">Calcular Ruta Más Corta</button>
+            <p id="resultado"></p>
+        </div>
+    </section>
+    <script src="main.js"></script>
+</body>
+</html>
