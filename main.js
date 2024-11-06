@@ -11,10 +11,22 @@ class Ciudad {
 
 // Clase para representar las rutas entre ciudades
 class Ruta {
-    constructor(origen, destino, distancia) {
+    constructor(origen, destino, distancia, velocidad = 60, tiempoMinimo = 5) {
         this.origen = origen;
         this.destino = destino;
         this.distancia = distancia;
+        this.velocidad = velocidad;
+        this.tiempoMinimo = tiempoMinimo;
+        this.tiempo = this.calcularTiempo(); // Time in minutes
+    }
+
+    calcularTiempo() {
+        const tiempocalculado = (this.distancia / this.velocidad) * 60; // Convert hours to minutes
+        const tiempofinal = Math.max(tiempocalculado, this.tiempoMinimo);
+
+        return tiempofinal;
+
+   
     }
 }
 
@@ -45,6 +57,7 @@ class GrafoTransporte {
     // Algoritmo de Dijkstra para encontrar la ruta más corta
     dijkstra(origen, destino) {
         const distancias = new Map();
+        const tiempos = new Map();
         const previo = new Map();
         const visitados = new Set();
         const queue = [origen];
@@ -52,8 +65,10 @@ class GrafoTransporte {
         // Inicializar distancias
         this.grafo.forEach((_, ciudad) => {
             distancias.set(ciudad, Infinity);
+            tiempos.set(ciudad, Infinity);  
         });
         distancias.set(origen, 0);
+        tiempos.set(origen, 0)
 
         while (queue.length > 0) {
             // Obtener la ciudad con la distancia más corta
@@ -70,9 +85,11 @@ class GrafoTransporte {
             rutas.forEach(ruta => {
                 if (!visitados.has(ruta.destino)) {
                     const nuevaDistancia = distancias.get(ciudadActual) + ruta.distancia;
+                    const nuevoTiempo = tiempos.get(ciudadActual) + ruta.tiempo
 
                     if (nuevaDistancia < distancias.get(ruta.destino)) {
                         distancias.set(ruta.destino, nuevaDistancia);
+                        tiempos.set(ruta.destino, nuevoTiempo);
                         previo.set(ruta.destino, ciudadActual);
                         if (!queue.includes(ruta.destino)) {
                             queue.push(ruta.destino);
@@ -82,6 +99,12 @@ class GrafoTransporte {
             });
         }
 
+        const totalTiempo = tiempos.get(destino);
+        const horas = Math.floor(totalTiempo / 60);
+        const minutos = Math.floor(totalTiempo % 60);
+        const tiempoFormateado = `${horas}h ${minutos}m`;
+
+
         // Reconstruir la ruta más corta
         const rutaFinal = [];
         let ciudadActual = destino;
@@ -90,7 +113,7 @@ class GrafoTransporte {
             ciudadActual = previo.get(ciudadActual);
         }
 
-        return { ruta: rutaFinal, distancia: distancias.get(destino) };
+        return { ruta: rutaFinal, distancia: distancias.get(destino), tiempo: tiempoFormateado };
     }
 }
 
@@ -204,8 +227,8 @@ function main() {
         const destino = grafo.obtenerCiudades().find(c => c.nombre === destinoNombre);
 
         if (origen && destino) {
-            const { ruta, distancia } = grafo.dijkstra(origen, destino);
-            document.getElementById('resultado').innerText = `Ruta más corta: ${ruta.map(c => c.toString()).join(' -> ')} (Distancia: ${distancia} KM)`;
+            const { ruta, distancia, tiempo} = grafo.dijkstra(origen, destino);
+            document.getElementById('resultado').innerText = `Ruta más corta: ${ruta.map(c => c.toString()).join(' -> ')} (Distancia: ${distancia} KM, tiempo estimado; ${tiempo})`;
             dibujarGrafo(grafo, ruta); // Redibujar el grafo con la ruta más corta resaltada
         } else {
             document.getElementById('resultado').innerText = 'Por favor, ingrese ciudades válidas.';
