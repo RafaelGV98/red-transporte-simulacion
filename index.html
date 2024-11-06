@@ -1,24 +1,49 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Red de transporte</title>
-    <link rel="stylesheet" href="style.css" >
+    <title>Rutas de Transporte</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Red de Transporte</h1>
-    <section class="container">
-        <div class="grafico" >
-            <canvas class="canvas" id="miCanvas" width="600" height="600"></canvas>
+    <div class="app-container">
+        <header class="app-header">
+            <h1><i class="fas fa-route"></i> Rutas de Transporte</h1>
+        </header>
+
+        <section class="search-container">
+            <div class="input-group">
+                <i class="fas fa-circle-dot"></i>
+                <input type="text" id="origen" placeholder="Ciudad de origen">
+            </div>
+            <div class="input-group">
+                <i class="fas fa-location-dot"></i>
+                <input type="text" id="destino" placeholder="Ciudad de destino">
+            </div>
+            <button id="calcularRuta" class="search-button">
+                <i class="fas fa-search"></i> Buscar Ruta
+            </button>
+        </section>
+
+        <div class="map-container">
+            <canvas id="miCanvas" width="800" height="600"></canvas>
         </div>
-        <div class="formulario"  id="formulario">
-            <input type="text" id="origen" placeholder="Ciudad de Origen" />
-            <input type="text" id="destino" placeholder="Ciudad de Destino" />
-            <button id="calcularRuta">Calcular Ruta Más Corta</button>
-            <p id="resultado"></p>
+
+        <div class="result-container">
+            <div class="result-card">
+                <div class="result-header">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Detalles de la Ruta</span>
+                </div>
+                <div id="resultado" class="result-content">
+                    Seleccione las ciudades para calcular la ruta
+                </div>
+            </div>
         </div>
-    </section>
+    </div>
     <script src="main.js"></script>
 </body>
 </html>
